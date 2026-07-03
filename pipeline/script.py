@@ -16,6 +16,8 @@
 from __future__ import annotations
 
 import json
+import shutil
+import subprocess
 
 import httpx
 
@@ -31,11 +33,16 @@ RULES
   this exists in Korea"), then 3-5 quick fact scenes, then a closing scene
   that ends with a memorable line like "Only in Korea."
 - 4-6 scenes total. Each narration is 1-2 short sentences.
+- ACCURACY (critical): state only widely-known, TRUE facts about Korea. Do NOT
+  invent statistics, percentages, or numbers. Never encourage or praise illegal
+  or unsafe behavior. Keep the tone positive and respectful toward Korea.
 - video_prompt: an English prompt for an image generator describing realistic,
-  documentary-style b-roll of the Korean scene (vertical 9:16).
-  SAFETY (must follow): NO text or letters in the image; NO real, famous, or
-  recognizable people's faces; NO celebrities; NO brand names, logos, or
-  trademarks. Use generic streets, objects, food, buildings, environments.
+  documentary-style b-roll (vertical 9:16). Every scene is EXPLICITLY SET IN
+  KOREA — describe Korean people, Korean streets/architecture, Seoul, hangul
+  signage (blurred/unreadable), so it clearly looks Korean.
+  SAFETY (must follow): NO readable text or letters in the image; NO real,
+  famous, or recognizable people's faces; NO celebrities; NO brand names,
+  logos, or trademarks.
 - caption: a short ENGLISH on-screen caption (summary of the narration).
 - Final scene: invite a follow and end with an "Only in Korea"-style punchline.
 
@@ -75,6 +82,24 @@ def _via_ollama(topic: str) -> dict:
     return _clean_json(resp.json()["message"]["content"])
 
 
+def _via_claude_cli(topic: str) -> dict:
+    """Claude Code CLI 헤드리스(`claude -p`)로 생성. Max 구독 인증 사용, API 키 불필요."""
+    system, user = _prompt(topic)
+    full = f"{system}\n\n{user}\n\n(Remember: output ONLY the JSON object.)"
+    exe = shutil.which("claude") or "claude"
+    cmd = [exe, "-p", "--output-format", "json"]
+    if config.CLAUDE_CLI_MODEL:
+        cmd += ["--model", config.CLAUDE_CLI_MODEL]
+    p = subprocess.run(cmd, input=full, capture_output=True, text=True,
+                       encoding="utf-8", errors="replace", timeout=300)
+    if p.returncode != 0:
+        raise RuntimeError(f"claude CLI 실패 (exit {p.returncode}): {(p.stderr or '')[:300]}")
+    envelope = json.loads(p.stdout)
+    if envelope.get("is_error"):
+        raise RuntimeError(f"claude CLI 오류: {str(envelope.get('result',''))[:300]}")
+    return _clean_json(envelope["result"])
+
+
 def _via_claude(topic: str) -> dict:
     from anthropic import Anthropic
 
@@ -88,7 +113,9 @@ def _via_claude(topic: str) -> dict:
 
 
 def generate_script(topic: str) -> dict:
-    if config.SCRIPT_BACKEND == "claude":
+    if config.SCRIPT_BACKEND == "claude_cli":
+        data = _via_claude_cli(topic)
+    elif config.SCRIPT_BACKEND == "claude":
         data = _via_claude(topic)
     else:
         data = _via_ollama(topic)

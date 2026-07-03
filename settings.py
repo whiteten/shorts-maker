@@ -10,8 +10,12 @@ ROOT = Path(__file__).parent
 OUTPUT_DIR = ROOT / "output"
 ASSETS_DIR = ROOT / "assets"  # BGM, 폰트 등
 
-# 스크립트 생성  (backend: ollama=무료 기본 | claude=유료)
+# 스크립트 생성
+#   backend: claude_cli = Claude Code CLI 헤드리스(Max 구독, 키 불필요, 추천)
+#            ollama     = 로컬 무료
+#            claude     = Anthropic API (유료 키)
 SCRIPT_BACKEND = os.getenv("SCRIPT_BACKEND", "ollama").lower()
+CLAUDE_CLI_MODEL = os.getenv("CLAUDE_CLI_MODEL", "")  # 빈 값=CLI 기본 모델
 OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
