@@ -1,0 +1,22 @@
+# 스크립트 생성
+anthropic>=0.40.0
+
+# 트렌드 수집 / HTTP
+httpx>=0.27.0
+feedparser>=6.0.11
+
+# 음성 (무료 한국어 TTS)
+edge-tts>=6.1.12
+
+# AI 영상 생성 (Veo) — manual 모드만 쓸 거면 생략 가능
+google-genai>=1.0.0
+
+# YouTube 업로드
+google-api-python-client>=2.100.0
+google-auth-oauthlib>=1.2.0
+google-auth-httplib2>=0.2.0
+
+# 환경변수
+python-dotenv>=1.0.0
+
+# 참고: FFmpeg는 pip 패키지가 아니라 시스템에 설치해야 함.

@@ -1,0 +1,23 @@
+# 비밀/자격증명 — 절대 커밋 금지
+.env
+client_secret*.json
+token.json
+*.credentials
+
+# 생성물
+output/
+*.mp4
+*.mp3
+*.wav
+
+# 파이썬
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# 에디터
+.vscode/
+.idea/
+.DS_Store
