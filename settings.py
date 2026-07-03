@@ -23,15 +23,16 @@ IMAGE_BACKEND = os.getenv("IMAGE_BACKEND", "pollinations").lower()  # auto 모�
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 VEO_MODEL = os.getenv("VEO_MODEL", "veo-3.1-fast-generate-preview")
 
-# 콘텐츠
-LANGUAGE = os.getenv("LANGUAGE", "ko")
-SHORT_SECONDS = int(os.getenv("SHORT_SECONDS", "45"))
-TTS_VOICE = os.getenv("TTS_VOICE", "ko-KR-SunHiNeural")
+# 콘텐츠  (topic_source: ideas=한국니치 아이디어 생성 | trends=실시간 검색어)
+TOPIC_SOURCE = os.getenv("TOPIC_SOURCE", "ideas").lower()
+LANGUAGE = os.getenv("LANGUAGE", "en")
+SHORT_SECONDS = int(os.getenv("SHORT_SECONDS", "40"))
+TTS_VOICE = os.getenv("TTS_VOICE", "en-US-AriaNeural")
 
 # 유튜브
 YOUTUBE_CLIENT_SECRET = os.getenv("YOUTUBE_CLIENT_SECRET", "client_secret.json")
 YOUTUBE_PRIVACY = os.getenv("YOUTUBE_PRIVACY", "private")
-YOUTUBE_CATEGORY_ID = os.getenv("YOUTUBE_CATEGORY_ID", "24")
+YOUTUBE_CATEGORY_ID = os.getenv("YOUTUBE_CATEGORY_ID", "27")  # 27=Education
 
 # 세로 쇼츠 규격
 WIDTH, HEIGHT = 1080, 1920

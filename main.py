@@ -14,7 +14,7 @@ from datetime import datetime
 from pathlib import Path
 
 import settings as config
-from pipeline import compose, script, trends, tts
+from pipeline import compose, ideas, script, trends, tts
 from pipeline import upload as uploader
 from pipeline import video
 
@@ -63,17 +63,21 @@ def make_one(topic: str, do_upload: bool) -> Path:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--topic", help="주제 직접 지정")
-    ap.add_argument("--count", type=int, default=1, help="트렌드 상위 N건 생성")
+    ap.add_argument("--count", type=int, default=1, help="생성할 쇼츠 개수")
     ap.add_argument("--upload", action="store_true", help="생성 후 업로드")
     args = ap.parse_args()
 
     if args.topic:
         topics = [args.topic]
-    else:
+    elif config.TOPIC_SOURCE == "trends":
         topics = trends.fetch_trending(args.count)
+    else:  # ideas: 한국 니치 아이디어 생성 (중복 방지)
+        topics = ideas.generate_ideas(args.count)
 
     for t in topics:
         make_one(t, args.upload)
+        if not args.topic and config.TOPIC_SOURCE == "ideas":
+            ideas.mark_used(t)  # 재사용 방지 기록
 
 
 if __name__ == "__main__":

@@ -21,21 +21,31 @@ import httpx
 
 import settings as config
 
-_SYSTEM = """너는 유튜브 쇼츠 대본 작가다. 주어진 주제로 {seconds}초 분량의
-세로형 쇼츠 대본을 만든다. 규칙:
-- 첫 3초에 강한 훅(hook)으로 시청자를 붙잡는다.
-- 장면(scene)은 4~6개. 각 장면 나레이션은 한국어로 1~2문장(짧고 임팩트 있게).
-- 각 장면의 video_prompt는 영상 생성 모델용 '영어' 프롬프트로, 세로 9:16 구도,
-  구체적 피사체·움직임·분위기를 묘사한다. 화면에 글자/자막은 넣지 말 것.
-- caption은 화면에 번인할 짧은 한국어 자막(나레이션 요약).
-- 마지막 장면은 구독/좋아요 유도로 마무리.
-반드시 아래 JSON 스키마만 출력한다(설명·코드펜스 없이):
+_SYSTEM = """You write viral ENGLISH YouTube Shorts about Korea for a global
+audience curious about Korean culture, technology, and daily life.
+Given a topic, write a {seconds}-second vertical short.
+
+RULES
+- Language: English. Punchy, conversational, energetic — spoken narration.
+- Structure: a strong HOOK in the first 3 seconds (e.g. "You won't believe
+  this exists in Korea"), then 3-5 quick fact scenes, then a closing scene
+  that ends with a memorable line like "Only in Korea."
+- 4-6 scenes total. Each narration is 1-2 short sentences.
+- video_prompt: an English prompt for an image generator describing realistic,
+  documentary-style b-roll of the Korean scene (vertical 9:16).
+  SAFETY (must follow): NO text or letters in the image; NO real, famous, or
+  recognizable people's faces; NO celebrities; NO brand names, logos, or
+  trademarks. Use generic streets, objects, food, buildings, environments.
+- caption: a short ENGLISH on-screen caption (summary of the narration).
+- Final scene: invite a follow and end with an "Only in Korea"-style punchline.
+
+Output ONLY this JSON (no prose, no code fences):
 {{"title","description","hashtags":[],"scenes":[{{"narration","video_prompt","caption"}}]}}"""
 
 
 def _prompt(topic: str) -> tuple[str, str]:
     system = _SYSTEM.format(seconds=config.SHORT_SECONDS)
-    user = f"주제: {topic}\n\n위 주제로 쇼츠 대본을 JSON으로 만들어줘."
+    user = f"Topic: {topic}\n\nWrite the short's script as JSON."
     return system, user
 
 
