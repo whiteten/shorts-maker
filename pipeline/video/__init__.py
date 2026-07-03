@@ -17,6 +17,9 @@ def generate_clips(scenes: list[dict], run_dir: Path) -> list[Path]:
     if config.VIDEO_SOURCE == "veo":
         from . import veo
         return veo.generate_clips(scenes, run_dir)
+    if config.VIDEO_SOURCE == "stock":
+        from . import stock
+        return stock.generate_clips(scenes, run_dir)
     if config.VIDEO_SOURCE == "auto":
         from . import auto
         return auto.generate_clips(scenes, run_dir)

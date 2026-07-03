@@ -21,8 +21,12 @@ OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 SCRIPT_MODEL = os.getenv("SCRIPT_MODEL", "claude-opus-4-8")
 
-# 영상 생성  (manual=Flow수동·무료 | auto=이미지+모션·무료 | veo=API·유료)
-VIDEO_SOURCE = os.getenv("VIDEO_SOURCE", "manual").lower()
+# 영상 생성
+#   stock  = 실사 스톡 푸티지 Pexels (무료 키, 완전자동, 추천)
+#   auto   = 이미지 생성+모션 (무료, 완전자동)
+#   manual = Flow 수동 (무료, 반자동) / veo = Veo API (유료)
+VIDEO_SOURCE = os.getenv("VIDEO_SOURCE", "auto").lower()
+PEXELS_API_KEY = os.getenv("PEXELS_API_KEY", "")           # stock 모드용
 IMAGE_BACKEND = os.getenv("IMAGE_BACKEND", "pollinations").lower()  # auto 모드용
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 VEO_MODEL = os.getenv("VEO_MODEL", "veo-3.1-fast-generate-preview")

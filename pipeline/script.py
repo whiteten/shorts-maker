@@ -44,10 +44,14 @@ RULES
   famous, or recognizable people's faces; NO celebrities; NO brand names,
   logos, or trademarks.
 - caption: a short ENGLISH on-screen caption (summary of the narration).
+- stock_query: 2-4 English keywords to find matching REAL stock FOOTAGE for
+  this scene (e.g. "Seoul street night", "Korean apartment building",
+  "night market food"). Use concrete, filmable subjects — generic enough that
+  stock libraries will have it, but Korea/Asia-flavored when possible.
 - Final scene: invite a follow and end with an "Only in Korea"-style punchline.
 
 Output ONLY this JSON (no prose, no code fences):
-{{"title","description","hashtags":[],"scenes":[{{"narration","video_prompt","caption"}}]}}"""
+{{"title","description","hashtags":[],"scenes":[{{"narration","video_prompt","caption","stock_query"}}]}}"""
 
 
 def _prompt(topic: str) -> tuple[str, str]:
