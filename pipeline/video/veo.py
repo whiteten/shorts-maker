@@ -8,7 +8,7 @@ from __future__ import annotations
 import time
 from pathlib import Path
 
-import config
+import settings as config
 
 
 def generate_clips(scenes: list[dict], run_dir: Path) -> list[Path]:

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import config
+import settings as config
 
 _SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 _TOKEN = config.ROOT / "token.json"

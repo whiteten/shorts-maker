@@ -19,7 +19,7 @@ import json
 
 import httpx
 
-import config
+import settings as config
 
 _SYSTEM = """너는 유튜브 쇼츠 대본 작가다. 주어진 주제로 {seconds}초 분량의
 세로형 쇼츠 대본을 만든다. 규칙:

@@ -9,7 +9,7 @@ from pathlib import Path
 
 import edge_tts
 
-import config
+import settings as config
 
 
 async def _synth(text: str, dest: Path, voice: str) -> None:

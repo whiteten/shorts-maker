@@ -13,7 +13,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-import config
+import settings as config
 from pipeline import compose, script, trends, tts
 from pipeline import upload as uploader
 from pipeline import video

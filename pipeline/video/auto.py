@@ -15,7 +15,7 @@ from pathlib import Path
 
 import httpx
 
-import config
+import settings as config
 
 _CLIP_SECONDS = 10  # 넉넉히 만들고 compose에서 오디오 길이에 맞춰 자름
 

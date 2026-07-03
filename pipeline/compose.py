@@ -11,7 +11,7 @@ import json
 import subprocess
 from pathlib import Path
 
-import config
+import settings as config
 
 # 한국어 자막 폰트 (Windows 기본 맑은고딕). 없으면 assets/font.ttf 사용.
 _FONT = Path("C:/Windows/Fonts/malgun.ttf")
@@ -20,7 +20,11 @@ if not _FONT.exists():
 
 
 def _run(cmd: list[str]) -> None:
-    subprocess.run(cmd, check=True, capture_output=True)
+    p = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8",
+                       errors="replace")
+    if p.returncode != 0:
+        tail = "\n".join((p.stderr or "").splitlines()[-8:])
+        raise RuntimeError(f"ffmpeg 실패 (exit {p.returncode}):\n{tail}")
 
 
 def _duration(path: Path) -> float:
@@ -32,9 +36,9 @@ def _duration(path: Path) -> float:
     return float(json.loads(out)["format"]["duration"])
 
 
-def _ff_font() -> str:
-    # ffmpeg 필터 안에서 콜론/역슬래시 이스케이프
-    return str(_FONT).replace("\\", "/").replace(":", "\\:")
+def _ff_path(p) -> str:
+    # ffmpeg 필터 인자용: 슬래시 통일 + 콜론 이스케이프 (Windows 'C:' 대응)
+    return str(p).replace("\\", "/").replace(":", "\\:")
 
 
 def _make_segment(clip: Path, audio: Path, caption: str, dest: Path) -> None:
@@ -45,7 +49,7 @@ def _make_segment(clip: Path, audio: Path, caption: str, dest: Path) -> None:
     vf = (
         f"scale={config.WIDTH}:{config.HEIGHT}:force_original_aspect_ratio=increase,"
         f"crop={config.WIDTH}:{config.HEIGHT},"
-        f"drawtext=fontfile='{_ff_font()}':textfile='{cap_file.as_posix()}':"
+        f"drawtext=fontfile='{_ff_path(_FONT)}':textfile='{_ff_path(cap_file)}':"
         f"fontcolor=white:fontsize=56:borderw=4:bordercolor=black:"
         f"x=(w-text_w)/2:y=h-360:line_spacing=10"
     )
